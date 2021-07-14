@@ -22,7 +22,7 @@ func init() {
 			fmt.Println(".env 配置文件未找到")
 			return
 		}
-	}else{
+	} else {
 		AppId = viper.GetString("APPID")
 		AliPublicKey = viper.GetString("PUBLIC_KEY")
 		PrivateKey = viper.GetString("PRIVATE_KEY")
