@@ -2,28 +2,26 @@ package main
 
 import (
 	"fmt"
-	"github.com/spf13/viper"
+	"github.com/sirupsen/logrus"
+	_ "hello/ali_pay/bootstrap"
 	_ "hello/ali_pay/config"
+	"hello/ali_pay/pkg"
 )
 
 func main() {
-	viper.SetConfigName(".env")
-	//viper.SetConfigType("")
-	viper.AddConfigPath(".")
-	if err := viper.ReadInConfig(); err != nil {
-		fmt.Println(err)
-		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
-			fmt.Println("配置文件未找到")
-			return
-		}
+	// 网页支付
+	payPageUrl, err := pkg.WebPageAlipay()
+	if err != nil {
+		logrus.Error(err)
 	} else {
-		fmt.Println("appid=", viper.GetString("APPID"))
+		fmt.Println("payWapUrl>>> ", payPageUrl)
+	}
+	//手机端支付
+	payWapUrl, err := pkg.WapPay()
+	if err != nil {
+		logrus.Error(err)
+	} else {
+		fmt.Println("payWapUrl>>> ", payWapUrl)
 	}
 
-	//return
-	//// 网页支付
-	//payUrl := pkg.WebPageAlipay()
-	//// 手机端支付
-	////payUrl := pkg.WapPay()
-	//fmt.Println("payUrl", payUrl)
 }

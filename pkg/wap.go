@@ -1,7 +1,6 @@
 package pkg
 
 import (
-	"fmt"
 	"github.com/smartwalle/alipay/v3"
 	"hello/ali_pay/bootstrap"
 	"time"
@@ -12,7 +11,7 @@ const (
 	wapTestAmount = "0.01"
 )
 
-func WapPay() (payUrl string) {
+func WapPay() (payUrl string, err error) {
 	pay := alipay.TradeWapPay{}
 	pay.ReturnURL = wapReturnURL
 	pay.Subject = "支付宝网页支付测试"
@@ -23,10 +22,9 @@ func WapPay() (payUrl string) {
 	url, err := bootstrap.PayClientInstance().TradeWapPay(pay)
 
 	if err != nil {
-		fmt.Println(err)
-		return
+		return payUrl, err
+	} else {
+		payUrl = url.String()
+		return payUrl, nil
 	}
-
-	payUrl = url.String()
-	return
 }

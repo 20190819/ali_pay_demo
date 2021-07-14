@@ -1,26 +1,24 @@
 package bootstrap
 
 import (
-	"fmt"
 	"github.com/smartwalle/alipay/v3"
 	"hello/ali_pay/config"
 	"sync"
 )
 
 var once sync.Once
-var Client *alipay.Client
+var client *alipay.Client
+var publicKey = config.AliPublicKey
 
 func init() {
-	err := PayClientInstance().LoadAliPayPublicKey(config.AliPublicKey)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
+	client = PayClientInstance()
 }
 
 func PayClientInstance() *alipay.Client {
 	once.Do(func() {
-		Client, _ = alipay.New(config.AppId, config.PrivateKey, config.IsProd)
+		client, _ = alipay.New(config.AppId, config.PrivateKey, config.IsProd)
+		_=client.LoadAliPayPublicKey(publicKey)
 	})
-	return Client
+
+	return client
 }
